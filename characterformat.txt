@@ -1,0 +1,130 @@
+Charater Format
+
+Compressed Stream
+{
+	[ Padding is aligned to 8 bytes ]
+
+	00 4	Entity ID (Always 1)
+	04 8	X Position
+	0C 8	Y Position
+	14 8	Z Position
+	1C 4	Pitch
+	20 4	Roll
+	24 4	Yaw
+	28 4	Health (Float)
+	2C 4	Experience
+	30 4	Level
+	34 1	Class
+	35 1	Specialization
+	36 4	Unknown (Stored at [PlayerBase + 1198h])
+	3A 4	Unknown (Stored at [PlayerBase + 119Ch])
+
+	[ Equipment ]
+	{ Unused, Neck, Chest, Feet, Hands, Shoulder, Left Weapon, Right Weapon,
+		Left Ring, Right Ring, Light, Special, Pet }
+	For 13
+	{
+		<Item>
+	}
+
+	00 4	Length { Name }
+	04 4	Race
+	08 1	Gender (0 = Male, 1 = Female)
+	09 3	Padding
+	0C 4	Face Index
+	10 4	Hair Index
+	14 1	Hair R					[ Stored as bytes in the structure ]
+	15 1	Hair G
+	16 1	Hair B
+	17 1	Padding
+	18 4	InventoryCount
+	For InventoryCount
+	{
+		00 4 SlotCount
+		For SlotCount
+		{
+			<Item>
+		}
+	}
+
+	00 4	Coins (Split into bronze, silver, gold ingame)
+	04 4	Platinum Coins
+
+	[ Crafting recipes ]
+	08 4	Count
+	For Count
+	{
+		<Item>
+	}
+
+	[ Worlds ]
+	00 4	Count
+	For Count
+	{
+		00 4	Seed
+		04 4	Length { Name }
+		08 8	X
+		10 8	Z
+		18 8	Y
+	}
+	
+	00 4	LastWorldSeed
+	04 4	Length { String <LastWorldName> }
+
+	[ Skills ]
+	
+	00 4	Mana Cubes
+	04 4	Skill Count
+	08 4	Pet Master Skill Level
+	0C 4	Pet Riding Level
+	10 4	Climbing Skill Level
+	14 4	Hang Gliding Skill Level
+	18 4	Swimming Skill Level
+	1C 4	Sailing Skill Level
+	20 4	Tier 1 Skill Level
+	24 4	Tier 2 Skill Level
+	28 4	Tier 3 Skill Level
+
+	[ I think that these are two extra skills to be added in a future update ]
+	2C 4	Unknown Skill? (Always 0)
+	30 4	Unknown Skill? (Always 0)
+}
+
+<Item>
+{
+	00 1	Type
+	01 1	Subtype
+	02 2	Padding
+	04 2	Modifier
+	06 2	Padding
+	08 4	Unknown
+	0C 1	Rarity
+	0D 1	Material
+	0E 1	Item Flags
+	0F 1	Padding
+	10 2	Level
+	12 2	Padding
+	
+	[ Item Attributes ]
+	For 32
+	{
+		00 1	X Offset
+		01 1	Y Offset
+		02 1	Z Offset
+		03 1	Material
+		04 2	Level
+		06 2	Padding
+	}
+
+	00 4	Attributes Used
+}
+
+=== Notes on Player Name ===
+Technicaly the name can be signed int max characters long, however,
+	the game has some routine that verifies the names are less than
+	or equal to 15 character and some other small attributes and
+	panics if it isn't.
+
+=== Notes on Pet Names ===
+Pet names can be 15 characters long and are stored as item attributes,
+	the material byte being used as the ASCII character.
